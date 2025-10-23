@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+ENV/
+.ipynb_checkpoints/
+
+# FastAPI/ML Service
+*.log
+*.db
+.DS_Store
+.cache/
+.mypy_cache/
+.pytest_cache/
+*.sqlite3
+model_checkpoints/
+*.joblib
+*.pkl
+
+# Node.js / Prisma
+node_modules/
+dist/
+build/
+.prisma/
+.env
+*.env
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# System files
+Thumbs.db
+.DS_Store
+
+# Docker
+*.pid
+docker-compose.override.yml
