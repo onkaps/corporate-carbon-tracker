@@ -1,0 +1,26 @@
+Dataset Summary
+================================================================================
+Rows: 10,000
+Columns: 20
+
+Columns:
+  - Body Type
+  - Sex
+  - Diet
+  - How Often Shower
+  - Heating Energy Source
+  - Transport
+  - Vehicle Type
+  - Social Activity
+  - Monthly Grocery Bill
+  - Frequency of Traveling by Air
+  - Vehicle Monthly Distance Km
+  - Waste Bag Size
+  - Waste Bag Weekly Count
+  - How Long TV PC Daily Hour
+  - How Many New Clothes Monthly
+  - How Long Internet Daily Hour
+  - Energy efficiency
+  - Recycling
+  - Cooking_With
+  - CarbonEmission

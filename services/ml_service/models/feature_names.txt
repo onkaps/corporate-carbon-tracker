@@ -1,0 +1,62 @@
+Body Type
+Sex
+How Often Shower
+Social Activity
+Monthly Grocery Bill
+Frequency of Traveling by Air
+Vehicle Monthly Distance Km
+Waste Bag Size
+Waste Bag Weekly Count
+How Long TV PC Daily Hour
+How Many New Clothes Monthly
+How Long Internet Daily Hour
+Energy efficiency
+Diet_omnivore
+Diet_pescatarian
+Diet_vegan
+Diet_vegetarian
+Heating Energy Source_coal
+Heating Energy Source_electricity
+Heating Energy Source_natural gas
+Heating Energy Source_wood
+Transport_private
+Transport_public
+Transport_walk/bicycle
+Vehicle Type_No Vehicle
+Vehicle Type_diesel
+Vehicle Type_electric
+Vehicle Type_hybrid
+Vehicle Type_lpg
+Vehicle Type_petrol
+Recycling_['Glass', 'Metal']
+Recycling_['Glass']
+Recycling_['Metal']
+Recycling_['Paper', 'Glass', 'Metal']
+Recycling_['Paper', 'Glass']
+Recycling_['Paper', 'Metal']
+Recycling_['Paper', 'Plastic', 'Glass', 'Metal']
+Recycling_['Paper', 'Plastic', 'Glass']
+Recycling_['Paper', 'Plastic', 'Metal']
+Recycling_['Paper', 'Plastic']
+Recycling_['Paper']
+Recycling_['Plastic', 'Glass', 'Metal']
+Recycling_['Plastic', 'Glass']
+Recycling_['Plastic', 'Metal']
+Recycling_['Plastic']
+Recycling_[]
+Cooking_With_['Grill', 'Airfryer']
+Cooking_With_['Microwave', 'Grill', 'Airfryer']
+Cooking_With_['Microwave']
+Cooking_With_['Oven', 'Grill', 'Airfryer']
+Cooking_With_['Oven', 'Microwave', 'Grill', 'Airfryer']
+Cooking_With_['Oven', 'Microwave']
+Cooking_With_['Oven']
+Cooking_With_['Stove', 'Grill', 'Airfryer']
+Cooking_With_['Stove', 'Microwave', 'Grill', 'Airfryer']
+Cooking_With_['Stove', 'Microwave']
+Cooking_With_['Stove', 'Oven', 'Grill', 'Airfryer']
+Cooking_With_['Stove', 'Oven', 'Microwave', 'Grill', 'Airfryer']
+Cooking_With_['Stove', 'Oven', 'Microwave']
+Cooking_With_['Stove', 'Oven']
+Cooking_With_['Stove']
+Cooking_With_[]
