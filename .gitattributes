@@ -1,0 +1,6 @@
+# Ignore Jupyter notebooks from language stats
+services/ml_service/**/*.ipynb linguist-vendored
+
+# Treat TypeScript as the main language
+*.ts linguist-detectable=true
+*.py linguist-detectable=true
