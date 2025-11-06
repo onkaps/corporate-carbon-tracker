@@ -1,0 +1,106 @@
+// Prisma Schema for Carbon Footprint Tracker
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================================
+// MODELS
+// ============================================================================
+
+model Company {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique @db.VarChar(200)
+  industry  String?   @db.VarChar(100)
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  
+  employees Employee[]
+
+  @@map("companies")
+}
+
+model Employee {
+  id          Int       @id @default(autoincrement())
+  employeeId  String    @unique @map("employee_id") @db.VarChar(50)
+  name        String    @db.VarChar(200)
+  email       String    @unique @db.VarChar(200)
+  password    String    @db.VarChar(255)
+  department  String?   @db.VarChar(100)
+  position    String?   @db.VarChar(100)
+  isAdmin     Boolean   @default(false) @map("is_admin")
+  companyId   Int       @map("company_id")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  
+  company     Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  footprints  CarbonFootprint[]
+
+  @@index([companyId])
+  @@index([email])
+  @@map("employees")
+}
+
+model CarbonFootprint {
+  id                Int      @id @default(autoincrement())
+  employeeId        Int      @map("employee_id")
+  
+  // Personal data
+  bodyType          String?  @map("body_type") @db.VarChar(20)
+  sex               String?  @db.VarChar(10)
+  diet              String?  @db.VarChar(20)
+  showerFrequency   String?  @map("shower_frequency") @db.VarChar(30)
+  socialActivity    String?  @map("social_activity") @db.VarChar(20)
+  
+  // Travel data
+  transport         String?  @db.VarChar(20)
+  vehicleType       String?  @map("vehicle_type") @db.VarChar(20)
+  vehicleKm         Float?   @map("vehicle_km")
+  airTravel         String?  @map("air_travel") @db.VarChar(30)
+  
+  // Waste data
+  wasteBagSize      String?  @map("waste_bag_size") @db.VarChar(20)
+  wasteBagCount     Int?     @map("waste_bag_count")
+  recyclePaper      Boolean  @default(false) @map("recycle_paper")
+  recyclePlastic    Boolean  @default(false) @map("recycle_plastic")
+  recycleGlass      Boolean  @default(false) @map("recycle_glass")
+  recycleMetal      Boolean  @default(false) @map("recycle_metal")
+  
+  // Energy data
+  heatingEnergy     String?  @map("heating_energy") @db.VarChar(20)
+  cookingMicrowave  Boolean  @default(false) @map("cooking_microwave")
+  cookingOven       Boolean  @default(false) @map("cooking_oven")
+  cookingGrill      Boolean  @default(false) @map("cooking_grill")
+  cookingAirfryer   Boolean  @default(false) @map("cooking_airfryer")
+  cookingStove      Boolean  @default(false) @map("cooking_stove")
+  energyEfficiency  String?  @map("energy_efficiency") @db.VarChar(20)
+  dailyTvPc         Float?   @map("daily_tv_pc")
+  internetDaily     Float?   @map("internet_daily")
+  
+  // Consumption data
+  groceryBill       Float?   @map("grocery_bill")
+  clothesMonthly    Int?     @map("clothes_monthly")
+  
+  // Results from ML model
+  totalFootprint    Float    @map("total_footprint")
+  travelFootprint   Float?   @map("travel_footprint")
+  energyFootprint   Float?   @map("energy_footprint")
+  wasteFootprint    Float?   @map("waste_footprint")
+  dietFootprint     Float?   @map("diet_footprint")
+  
+  // Metadata
+  calculatedAt      DateTime @default(now()) @map("calculated_at")
+  month             Int
+  year              Int
+  
+  employee          Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@index([employeeId])
+  @@index([month, year])
+  @@index([calculatedAt])
+  @@map("carbon_footprints")
+}
