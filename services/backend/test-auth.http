@@ -1,0 +1,47 @@
+### Variables
+@baseUrl = http://localhost:3000/api/v1
+@token = YOUR_TOKEN_HERE
+
+### Health Check
+GET {{baseUrl}}/health
+
+### Register New Employee
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "employeeId": "EMP004",
+  "name": "Test Employee",
+  "email": "test@greentech.com",
+  "password": "test123456",
+  "department": "Testing",
+  "position": "QA Engineer",
+  "isAdmin": false,
+  "companyId": 1
+}
+
+### Login (Admin)
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@greentech.com",
+  "password": "admin123"
+}
+
+### Login (Regular Employee)
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "john@greentech.com",
+  "password": "test123"
+}
+
+### Get Current User Profile (Protected - need token)
+GET {{baseUrl}}/auth/me
+Authorization: Bearer {{token}}
+
+### Test Protected Route
+GET {{baseUrl}}/auth/test
+Authorization: Bearer {{token}}

@@ -1,4 +1,4 @@
-import { IsEmail, IsString, MinLength, MaxLength, IsOptional, IsBoolean } from 'class-validator';
+import { IsEmail, IsString, MinLength, MaxLength, IsOptional, IsBoolean, IsNumber } from 'class-validator';
 
 export class RegisterDto {
   @IsString()
@@ -33,5 +33,6 @@ export class RegisterDto {
   @IsBoolean()
   isAdmin?: boolean;
 
+  @IsNumber()
   companyId: number;
 }
