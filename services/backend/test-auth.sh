@@ -10,7 +10,7 @@ echo "========================================"
 GREEN='\033[0;32m'
 RED='\033[0;31m'
 YELLOW='\033[1;33m'
-NC='\033[0m'
+NC='\033[0m' # No Color
 
 # Test 1: Health Check
 echo -e "\n${YELLOW}Test 1: Health Check${NC}"
@@ -58,4 +58,58 @@ if echo "$login_response" | grep -q "access_token"; then
     TOKEN=$(echo $login_response | grep -o '"access_token":"[^"]*' | cut -d'"' -f4)
     echo "Token received: ${TOKEN:0:20}..."
 else
-    echo
+    echo -e "${RED}✗ Login failed${NC}"
+    echo "Response: $login_response"
+    exit 1
+fi
+
+# Test 4: Get Profile (Protected Route)
+echo -e "\n${YELLOW}Test 4: Get Profile (Protected Route)${NC}"
+profile_response=$(curl -s $API_URL/auth/me \
+  -H "Authorization: Bearer $TOKEN")
+
+if echo "$profile_response" | grep -q "employeeId"; then
+    echo -e "${GREEN}✓ Profile retrieval successful${NC}"
+    echo "User: $(echo $profile_response | grep -o '"name":"[^"]*' | cut -d'"' -f4)"
+else
+    echo -e "${RED}✗ Profile retrieval failed${NC}"
+    echo "Response: $profile_response"
+fi
+
+# Test 5: Test Protected Route
+echo -e "\n${YELLOW}Test 5: Test Protected Route${NC}"
+protected_response=$(curl -s $API_URL/auth/test \
+  -H "Authorization: Bearer $TOKEN")
+
+if echo "$protected_response" | grep -q "This is a protected route"; then
+    echo -e "${GREEN}✓ Protected route accessible${NC}"
+else
+    echo -e "${RED}✗ Protected route failed${NC}"
+    echo "Response: $protected_response"
+fi
+
+# Test 6: Invalid Token
+echo -e "\n${YELLOW}Test 6: Invalid Token Test${NC}"
+invalid_response=$(curl -s -o /dev/null -w "%{http_code}" $API_URL/auth/me \
+  -H "Authorization: Bearer invalid_token_12345")
+
+if [ $invalid_response -eq 401 ]; then
+    echo -e "${GREEN}✓ Invalid token properly rejected${NC}"
+else
+    echo -e "${RED}✗ Invalid token not properly rejected (HTTP $invalid_response)${NC}"
+fi
+
+# Test 7: No Token
+echo -e "\n${YELLOW}Test 7: No Token Test${NC}"
+no_token_response=$(curl -s -o /dev/null -w "%{http_code}" $API_URL/auth/me)
+
+if [ $no_token_response -eq 401 ]; then
+    echo -e "${GREEN}✓ Missing token properly rejected${NC}"
+else
+    echo -e "${RED}✗ Missing token not properly rejected (HTTP $no_token_response)${NC}"
+fi
+
+# Summary
+echo -e "\n========================================"
+echo -e "${GREEN}ALL TESTS COMPLETED!${NC}"
+echo "========================================"
