@@ -5,6 +5,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
+import { EmployeesModule } from './employees/employees.module';
+import { CompaniesModule } from './companies/companies.module';
+import { FootprintsModule } from './footprints/footprints.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 
 @Module({
@@ -14,6 +17,9 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
     }),
     PrismaModule,
     AuthModule,
+    EmployeesModule,
+    CompaniesModule,
+    FootprintsModule,
   ],
   controllers: [AppController],
   providers: [

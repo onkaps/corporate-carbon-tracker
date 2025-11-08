@@ -1,0 +1,135 @@
+### Variables
+@baseUrl = http://localhost:3000/api/v1
+@token = YOUR_TOKEN_HERE
+
+### ============================================================================
+### AUTHENTICATION (Get Token First)
+### ============================================================================
+
+### Login as Admin
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@greentech.com",
+  "password": "admin123"
+}
+
+### Login as Regular User
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "john@greentech.com",
+  "password": "test123"
+}
+
+### ============================================================================
+### EMPLOYEES API
+### ============================================================================
+
+### Get All Employees
+GET {{baseUrl}}/employees
+Authorization: Bearer {{token}}
+
+### Get Employee by ID
+GET {{baseUrl}}/employees/1
+Authorization: Bearer {{token}}
+
+### Get Employee Statistics
+GET {{baseUrl}}/employees/1/statistics
+Authorization: Bearer {{token}}
+
+### Update Employee
+PATCH {{baseUrl}}/employees/2
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "department": "Engineering",
+  "position": "Senior Developer"
+}
+
+### Delete Employee (Admin only)
+DELETE {{baseUrl}}/employees/5
+Authorization: Bearer {{token}}
+
+### ============================================================================
+### COMPANIES API
+### ============================================================================
+
+### Get Company Details
+GET {{baseUrl}}/companies/1
+Authorization: Bearer {{token}}
+
+### Get Company Statistics
+GET {{baseUrl}}/companies/1/statistics
+Authorization: Bearer {{token}}
+
+### Get Department Breakdown
+GET {{baseUrl}}/companies/1/departments
+Authorization: Bearer {{token}}
+
+### Update Company (Admin only)
+PATCH {{baseUrl}}/companies/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "GreenTech Solutions Inc.",
+  "industry": "Technology & Sustainability"
+}
+
+### ============================================================================
+### CARBON FOOTPRINTS API
+### ============================================================================
+
+### Create Carbon Footprint Calculation
+POST {{baseUrl}}/footprints
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "bodyType": "average",
+  "sex": "male",
+  "diet": "omnivore",
+  "showerFrequency": "daily",
+  "socialActivity": "often",
+  "transport": "private",
+  "vehicleType": "petrol",
+  "vehicleKm": 50,
+  "airTravel": "rarely",
+  "wasteBagSize": "medium",
+  "wasteBagCount": 3,
+  "recyclePaper": true,
+  "recyclePlastic": true,
+  "recycleGlass": false,
+  "recycleMetal": false,
+  "heatingEnergy": "natural gas",
+  "cookingMicrowave": true,
+  "cookingOven": true,
+  "cookingGrill": false,
+  "cookingAirfryer": true,
+  "cookingStove": true,
+  "energyEfficiency": "sometimes",
+  "dailyTvPc": 4,
+  "internetDaily": 6,
+  "groceryBill": 200,
+  "clothesMonthly": 3
+}
+
+### Get Employee's Footprints
+GET {{baseUrl}}/footprints/employee/1
+Authorization: Bearer {{token}}
+
+### Get Footprint by ID
+GET {{baseUrl}}/footprints/1
+Authorization: Bearer {{token}}
+
+### Get Company Footprints by Month/Year
+GET {{baseUrl}}/footprints/company/1/month/11/year/2024
+Authorization: Bearer {{token}}
+
+### Delete Footprint
+DELETE {{baseUrl}}/footprints/1
+Authorization: Bearer {{token}}
