@@ -9,6 +9,14 @@ venv/
 ENV/
 .ipynb_checkpoints/
 
+
+# Ignore datasets
+services/ml_service/data/raw/*
+*.csv
+*.png
+
+
+
 # FastAPI/ML Service
 *.log
 *.db
