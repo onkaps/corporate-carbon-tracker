@@ -21,6 +21,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@nestjs/axios": "^4.0.1",
     "@nestjs/cli": "^11.0.10",
     "@nestjs/common": "^11.1.8",
     "@nestjs/config": "^4.0.2",
@@ -35,7 +36,8 @@
     "class-validator": "^0.14.2",
     "dotenv": "^17.2.3",
     "passport": "^0.7.0",
-    "passport-jwt": "^4.0.1"
+    "passport-jwt": "^4.0.1",
+    "rxjs": "^7.8.2"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
