@@ -7,6 +7,8 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { MlService } from '../ml/ml.service';
 import { CreateFootprintDto } from './dto';
+import { MLPredictionRequestDto } from '../ml/dto';
+
 
 @Injectable()
 export class FootprintsService {
@@ -17,20 +19,43 @@ export class FootprintsService {
     private mlService: MlService,
   ) {}
 
-  private convertToMLFormat(dto: CreateFootprintDto) {
+  private convertToMLFormat(dto: CreateFootprintDto): MLPredictionRequestDto {
     return {
-      vehicle_km: dto.vehicleKm,
-      air_travel: dto.airTravel,
-      recycle_paper: dto.recyclePaper,
-      recycle_plastic: dto.recyclePlastic,
-      recycle_glass: dto.recycleGlass,
-      recycle_metal: dto.recycleMetal,
-      internet_daily: dto.internetDaily,
-      daily_tv_pc: dto.dailyTvPc,
-      waste_bag_count: dto.wasteBagCount,
-      grocery_bill: dto.groceryBill,
-      clothes_monthly: dto.clothesMonthly,
-      diet: dto.diet,
+      // Personal data
+      body_type: dto.bodyType || 'average',
+      sex: dto.sex || 'male',
+      diet: dto.diet || 'omnivore',
+      shower_frequency: dto.showerFrequency || 'daily',
+      social_activity: dto.socialActivity || 'often',
+  
+      // Travel data
+      transport: (dto as any).transport || 'private',
+      vehicle_type: dto.vehicleType || 'petrol',
+      vehicle_km: Number(dto.vehicleKm) || 0,
+      air_travel: dto.airTravel || 'never',
+  
+      // Waste data
+      waste_bag_size: (dto as any).wasteBagSize || 'medium',
+      waste_bag_count: Number(dto.wasteBagCount) || 0,
+      recycle_paper: Boolean(dto.recyclePaper),
+      recycle_plastic: Boolean(dto.recyclePlastic),
+      recycle_glass: Boolean(dto.recycleGlass),
+      recycle_metal: Boolean(dto.recycleMetal),
+  
+      // Energy data
+      heating_energy: (dto as any).heatingEnergy || 'natural gas',
+      cooking_microwave: Boolean((dto as any).cookingMicrowave),
+      cooking_oven: Boolean((dto as any).cookingOven),
+      cooking_grill: Boolean((dto as any).cookingGrill),
+      cooking_airfryer: Boolean((dto as any).cookingAirfryer),
+      cooking_stove: Boolean((dto as any).cookingStove),
+      energy_efficiency: (dto as any).energyEfficiency || 'sometimes',
+      daily_tv_pc: Number(dto.dailyTvPc) || 0,
+      internet_daily: Number(dto.internetDaily) || 0,
+  
+      // Consumption data
+      grocery_bill: Number(dto.groceryBill) || 0,
+      clothes_monthly: Number(dto.clothesMonthly) || 0,
     };
   }
   /**
@@ -57,7 +82,7 @@ export class FootprintsService {
         this.logger.log('Using ML service for footprint prediction...');
 
         const mlPrediction = await this.mlService.predictFootprint(
-          this.convertToMLFormat(createFootprintDto),
+          this.convertToMLFormat(createFootprintDto) as any as MLPredictionRequestDto,
         );
 
         totalFootprint = Math.round(mlPrediction.total_footprint);
