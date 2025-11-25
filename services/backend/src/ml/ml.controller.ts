@@ -35,7 +35,7 @@ export class MlController {
    * Test prediction endpoint
    */
   @Post('predict')
-  async predict(@Body() data: MLPredictionRequestDto) {
+  async predict(@Body() data: any) {
     return this.mlService.predictFootprint(data);
   }
 }
