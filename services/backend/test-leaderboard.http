@@ -1,0 +1,96 @@
+### Variables
+@baseUrl = http://localhost:3000/api/v1
+@token = YOUR_TOKEN_HERE
+
+### ============================================================================
+### AUTHENTICATION (Get Token First)
+### ============================================================================
+
+### Login as Admin
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@greentech.com",
+  "password": "admin123"
+}
+
+### ============================================================================
+### EMPLOYEE LEADERBOARD
+### ============================================================================
+
+### Get Employee Leaderboard (Top 10)
+GET {{baseUrl}}/leaderboard/employees?limit=10
+Authorization: Bearer {{token}}
+
+### Get Employee Leaderboard for Specific Month
+GET {{baseUrl}}/leaderboard/employees?month=11&year=2024&limit=20
+Authorization: Bearer {{token}}
+
+### Get Employee Leaderboard by Department
+GET {{baseUrl}}/leaderboard/employees?department=Engineering&limit=10
+Authorization: Bearer {{token}}
+
+### Get My Current Rank
+GET {{baseUrl}}/leaderboard/my-rank
+Authorization: Bearer {{token}}
+
+### ============================================================================
+### DEPARTMENT RANKINGS
+### ============================================================================
+
+### Get Department Rankings
+GET {{baseUrl}}/leaderboard/departments
+Authorization: Bearer {{token}}
+
+### Get Department Rankings for Specific Month
+GET {{baseUrl}}/leaderboard/departments?month=11&year=2024
+Authorization: Bearer {{token}}
+
+### ============================================================================
+### COMPANY RANKINGS
+### ============================================================================
+
+### Get Company Rankings (Top 10)
+GET {{baseUrl}}/leaderboard/companies?limit=10
+Authorization: Bearer {{token}}
+
+### ============================================================================
+### ACHIEVEMENTS
+### ============================================================================
+
+### Get My Achievements
+GET {{baseUrl}}/leaderboard/achievements/1
+Authorization: Bearer {{token}}
+
+### Get Another Employee's Achievements (Admin only)
+GET {{baseUrl}}/leaderboard/achievements/2
+Authorization: Bearer {{token}}
+
+### ============================================================================
+### TRENDS & ANALYTICS
+### ============================================================================
+
+### Get Monthly Trends (Last 6 months)
+GET {{baseUrl}}/leaderboard/trends?months=6
+Authorization: Bearer {{token}}
+
+### Get Monthly Trends (Last 12 months)
+GET {{baseUrl}}/leaderboard/trends?months=12
+Authorization: Bearer {{token}}
+
+### ============================================================================
+### PERFORMANCE COMPARISON
+### ============================================================================
+
+### Compare My Performance with Company Average
+GET {{baseUrl}}/leaderboard/compare
+Authorization: Bearer {{token}}
+
+### Compare My Performance for Specific Month
+GET {{baseUrl}}/leaderboard/compare?month=11&year=2024
+Authorization: Bearer {{token}}
+
+### Compare My Performance with Department
+GET {{baseUrl}}/leaderboard/compare?department=Engineering
+Authorization: Bearer {{token}}

@@ -8,6 +8,7 @@ import { EmployeesModule } from './employees/employees.module';
 import { CompaniesModule } from './companies/companies.module';
 import { FootprintsModule } from './footprints/footprints.module';
 import { MlModule } from './ml/ml.module';
+import { LeaderboardModule } from './leaderboard/leaderboard.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { MlModule } from './ml/ml.module';
     CompaniesModule,
     FootprintsModule,
     MlModule,
+    LeaderboardModule,
   ],
   controllers: [AppController],
   providers: [AppService],
