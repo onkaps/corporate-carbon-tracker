@@ -37,7 +37,6 @@ export function Login() {
             setError(null);
             // @ts-ignore - login is mutate function from react-query
             await login(data);
-            navigate('/');
         } catch (err: any) {
             // Error handling is actually done in mutation, but if we use mutateAsync we can catch it here.
             // However, the current useAuth returns mutate, not mutateAsync.
