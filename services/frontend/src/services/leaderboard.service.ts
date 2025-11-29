@@ -7,7 +7,7 @@ export const leaderboardService = {
     month?: number;
     year?: number;
     department?: string;
-  }): Promise {
+  }): Promise<LeaderboardEntry[]> {
     const response = await api.get('/leaderboard/employees', { params });
     return response.data;
   },
@@ -17,7 +17,7 @@ export const leaderboardService = {
     return response.data;
   },
 
-  async getAchievements(employeeId: number): Promise {
+  async getAchievements(employeeId: number): Promise<Achievement[]> {
     const response = await api.get(`/leaderboard/achievements/${employeeId}`);
     return response.data;
   },

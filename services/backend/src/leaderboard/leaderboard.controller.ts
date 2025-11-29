@@ -101,7 +101,7 @@ import {
      */
     @Get('my-rank')
     async getMyRank(
-      @GetUser('id') employeeId: number,
+      @GetUser('employeeId') employeeIdString: string,
       @GetUser('companyId') companyId: number,
     ) {
       const now = new Date();
@@ -113,14 +113,9 @@ import {
           year: now.getFullYear(),
         },
       );
-  
-      const employee = await this.leaderboardService['prisma'].employee.findUnique({
-        where: { id: employeeId },
-        select: { employeeId: true },
-      });
-  
+
       const myEntry = leaderboard.find(
-        (entry) => entry.employeeId === employee?.employeeId,
+        (entry) => entry.employeeId === employeeIdString,
       );
   
       if (!myEntry) {

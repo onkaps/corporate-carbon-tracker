@@ -1,18 +1,18 @@
 import { api } from './api';
-import { AuthResponse, LoginRequest, RegisterRequest } from '@/types/auth.types';
+import { AuthResponse, LoginRequest, RegisterRequest, User } from '@/types/auth.types';
 
 export const authService = {
-  async login(data: LoginRequest): Promise {
+  async login(data: LoginRequest): Promise<AuthResponse> {
     const response = await api.post('/auth/login', data);
     return response.data;
   },
 
-  async register(data: RegisterRequest): Promise {
+  async register(data: RegisterRequest): Promise<AuthResponse> {
     const response = await api.post('/auth/register', data);
     return response.data;
   },
 
-  async getProfile() {
+  async getProfile(): Promise<User> {
     const response = await api.get('/auth/me');
     return response.data;
   },
@@ -35,7 +35,7 @@ export const authService = {
     return userStr ? JSON.parse(userStr) : null;
   },
 
-  setUser(user: any): void {
+  setUser(user: unknown): void {
     localStorage.setItem('user', JSON.stringify(user));
   },
 
