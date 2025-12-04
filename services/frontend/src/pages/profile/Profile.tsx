@@ -4,10 +4,10 @@ import { Button } from '@/components/ui/Button';
 import { User, Building, Mail } from 'lucide-react';
 
 export function Profile() {
-    const { user, logout } = useAuth();
+    const { user, logout, isLoadingProfile } = useAuth();
 
-    if (!user) {
-        return <div>Loading...</div>;
+    if (isLoadingProfile || !user) {
+        return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
     }
 
     return (

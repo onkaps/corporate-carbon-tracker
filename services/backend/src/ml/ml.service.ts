@@ -190,11 +190,17 @@ export class MlService {
 
   /**
    * Simple fallback calculation when ML service is unavailable
+   * Handles both camelCase and snake_case field names
    */
   calculateSimpleFallback(data: any): MLPredictionResponseDto {
     this.logger.warn('Using simple fallback calculation (ML service unavailable)');
 
     let total = 0;
+
+    // Helper to get value from either camelCase or snake_case
+    const getValue = (camelKey: string, snakeKey: string): any => {
+      return data[camelKey] !== undefined ? data[camelKey] : data[snakeKey];
+    };
 
     // Diet impact
     const dietImpact = {
@@ -203,28 +209,30 @@ export class MlService {
       pescatarian: 150,
       omnivore: 250,
     };
-    const diet = dietImpact[data.diet?.toLowerCase()] || 150;
+    const dietValue = getValue('diet', 'diet') || 'omnivore';
+    const diet = dietImpact[dietValue?.toLowerCase()] || 150;
     total += diet;
 
     // Transport impact
-    const vehicleKm = Number(data.vehicleKm) || 0;
-    const travel = vehicleKm * 0.2 + this.getAirTravelImpact(data.airTravel);
+    const vehicleKm = Number(getValue('vehicleKm', 'vehicle_km')) || 0;
+    const airTravel = getValue('airTravel', 'air_travel') || 'never';
+    const travel = vehicleKm * 0.2 + this.getAirTravelImpact(airTravel);
     total += travel;
 
     // Waste impact
-    const wasteBagCount = Number(data.wasteBagCount) || 0;
-    const waste = wasteBagCount * 10 - this.getRecyclingDiscount(data);
+    const wasteBagCount = Number(getValue('wasteBagCount', 'waste_bag_count')) || 0;
+    const waste = Math.max(0, wasteBagCount * 10 - this.getRecyclingDiscount(data));
     total += waste;
 
     // Energy impact
-    const dailyTvPc = Number(data.dailyTvPc) || 0;
-    const internetDaily = Number(data.internetDaily) || 0;
+    const dailyTvPc = Number(getValue('dailyTvPc', 'daily_tv_pc')) || 0;
+    const internetDaily = Number(getValue('internetDaily', 'internet_daily')) || 0;
     const energy = dailyTvPc * 5 + internetDaily * 3;
     total += energy;
 
     // Consumption impact
-    const groceryBill = Number(data.groceryBill) || 0;
-    const clothesMonthly = Number(data.clothesMonthly) || 0;
+    const groceryBill = Number(getValue('groceryBill', 'grocery_bill')) || 0;
+    const clothesMonthly = Number(getValue('clothesMonthly', 'clothes_monthly')) || 0;
     total += groceryBill * 0.1 + clothesMonthly * 15;
 
     return {
@@ -248,11 +256,17 @@ export class MlService {
   }
 
   private getRecyclingDiscount(data: any): number {
+    // Handle both camelCase and snake_case
+    const recyclePaper = data.recyclePaper !== undefined ? data.recyclePaper : data.recycle_paper;
+    const recyclePlastic = data.recyclePlastic !== undefined ? data.recyclePlastic : data.recycle_plastic;
+    const recycleGlass = data.recycleGlass !== undefined ? data.recycleGlass : data.recycle_glass;
+    const recycleMetal = data.recycleMetal !== undefined ? data.recycleMetal : data.recycle_metal;
+    
     const count = [
-      data.recyclePaper,
-      data.recyclePlastic,
-      data.recycleGlass,
-      data.recycleMetal,
+      recyclePaper,
+      recyclePlastic,
+      recycleGlass,
+      recycleMetal,
     ].filter(Boolean).length;
     return count * 5;
   }

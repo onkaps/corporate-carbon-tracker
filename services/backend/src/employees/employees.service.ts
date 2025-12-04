@@ -178,6 +178,10 @@ import {
         where: { employeeId },
         select: {
           totalFootprint: true,
+          travelFootprint: true,
+          energyFootprint: true,
+          wasteFootprint: true,
+          dietFootprint: true,
           month: true,
           year: true,
           calculatedAt: true,
@@ -186,45 +190,57 @@ import {
           calculatedAt: 'desc',
         },
       });
-  
+
       if (footprints.length === 0) {
         return {
-          totalCalculations: 0,
-          averageFootprint: 0,
-          latestFootprint: null,
-          trend: 'no data',
+          totalFootprint: 0,
+          footprintHistory: [],
+          breakdown: {
+            travel: 0,
+            energy: 0,
+            waste: 0,
+            diet: 0,
+          },
         };
       }
-  
-      const totalCalculations = footprints.length;
-      const averageFootprint =
-        footprints.reduce((sum, f) => sum + f.totalFootprint, 0) /
-        totalCalculations;
-      const latestFootprint = footprints[0].totalFootprint;
-  
-      // Calculate trend (comparing latest with average of previous)
-      let trend = 'stable';
-      if (footprints.length > 1) {
-        const previousAvg =
-          footprints
-            .slice(1)
-            .reduce((sum, f) => sum + f.totalFootprint, 0) /
-          (footprints.length - 1);
-        if (latestFootprint < previousAvg * 0.9) trend = 'improving';
-        else if (latestFootprint > previousAvg * 1.1) trend = 'worsening';
-      }
-  
+
+      // Get the latest footprint for breakdown
+      const latestFootprint = footprints[0];
+      
+      // Calculate total footprint (sum of all footprints or use latest)
+      const totalFootprint = footprints.reduce((sum, f) => sum + f.totalFootprint, 0);
+
+      // Group by month/year for history
+      const historyMap = new Map<string, { month: number; year: number; totalFootprint: number }>();
+      
+      footprints.forEach((f) => {
+        const key = `${f.year}-${f.month}`;
+        if (!historyMap.has(key)) {
+          historyMap.set(key, {
+            month: f.month,
+            year: f.year,
+            totalFootprint: 0,
+          });
+        }
+        const entry = historyMap.get(key)!;
+        entry.totalFootprint += f.totalFootprint;
+      });
+
+      const footprintHistory = Array.from(historyMap.values())
+        .sort((a, b) => {
+          if (a.year !== b.year) return a.year - b.year;
+          return a.month - b.month;
+        });
+
       return {
-        totalCalculations,
-        averageFootprint: Math.round(averageFootprint),
-        latestFootprint: Math.round(latestFootprint),
-        trend,
-        history: footprints.map((f) => ({
-          footprint: Math.round(f.totalFootprint),
-          month: f.month,
-          year: f.year,
-          date: f.calculatedAt,
-        })),
+        totalFootprint: Math.round(totalFootprint),
+        footprintHistory,
+        breakdown: {
+          travel: Math.round(latestFootprint.travelFootprint || 0),
+          energy: Math.round(latestFootprint.energyFootprint || 0),
+          waste: Math.round(latestFootprint.wasteFootprint || 0),
+          diet: Math.round(latestFootprint.dietFootprint || 0),
+        },
       };
     }
   }

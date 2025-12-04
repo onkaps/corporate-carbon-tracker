@@ -105,8 +105,10 @@ export class FootprintsService {
         `ML prediction failed, using fallback algorithm: ${error.message}`,
       );
 
+      // Convert to ML format first, then use fallback
+      const mlFormattedData = this.convertToMLFormat(createFootprintDto);
       const fallback = this.mlService.calculateSimpleFallback(
-        createFootprintDto,
+        mlFormattedData as any,
       );
 
       totalFootprint = fallback.total_footprint;

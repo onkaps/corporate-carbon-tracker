@@ -11,7 +11,7 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 export function Dashboard() {
     const { user } = useAuth();
 
-    const { data: employeeStats } = useQuery({
+    const { data: employeeStats, isLoading: isLoadingStats, error: statsError } = useQuery({
         queryKey: ['employee-stats', user?.id],
         queryFn: () => employeesService.getStatistics(user?.id as number),
         enabled: !!user?.id,
@@ -23,8 +23,30 @@ export function Dashboard() {
         enabled: !!user?.companyId,
     });
 
+    if (isLoadingStats) {
+        return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+    }
+
+    if (statsError) {
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <div className="text-center">
+                    <p className="text-red-500">Error loading statistics</p>
+                    <p className="text-sm text-gray-500 mt-2">Please try refreshing the page</p>
+                </div>
+            </div>
+        );
+    }
+
     if (!employeeStats) {
-        return <div>Loading...</div>;
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <div className="text-center">
+                    <p className="text-gray-500">No statistics available</p>
+                    <p className="text-sm text-gray-400 mt-2">Calculate your first carbon footprint to see statistics</p>
+                </div>
+            </div>
+        );
     }
 
     const breakdownData = [
@@ -102,15 +124,21 @@ export function Dashboard() {
                         <CardTitle>Monthly History</CardTitle>
                     </CardHeader>
                     <CardContent className="pl-2">
-                        <ResponsiveContainer width="100%" height={350}>
-                            <BarChart data={employeeStats.footprintHistory}>
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="month" />
-                                <YAxis />
-                                <Tooltip />
-                                <Bar dataKey="totalFootprint" fill="#8884d8" radius={[4, 4, 0, 0]} />
-                            </BarChart>
-                        </ResponsiveContainer>
+                        {employeeStats.footprintHistory.length > 0 ? (
+                            <ResponsiveContainer width="100%" height={350}>
+                                <BarChart data={employeeStats.footprintHistory}>
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis dataKey="month" />
+                                    <YAxis />
+                                    <Tooltip />
+                                    <Bar dataKey="totalFootprint" fill="#8884d8" radius={[4, 4, 0, 0]} />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        ) : (
+                            <div className="flex items-center justify-center h-[350px] text-gray-500">
+                                No history data available yet
+                            </div>
+                        )}
                     </CardContent>
                 </Card>
                 <Card className="col-span-3">

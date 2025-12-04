@@ -12,6 +12,7 @@ import { AlertCircle } from 'lucide-react';
 
 const registerSchema = z.object({
     name: z.string().min(2, 'Name must be at least 2 characters'),
+    employeeId: z.string().min(3, 'Employee ID must be at least 3 characters'),
     email: z.string().email('Invalid email address'),
     password: z.string().min(6, 'Password must be at least 6 characters'),
     department: z.string().min(2, 'Department is required'),
@@ -38,11 +39,10 @@ export function Register() {
         try {
             setIsLoading(true);
             setError(null);
-            // @ts-ignore
             await registerUser(data);
+            // Navigation is handled by useAuth hook's onSuccess callback
         } catch (err: any) {
-            setError(err.response?.data?.message || 'Failed to register');
-        } finally {
+            setError(err.response?.data?.message || err.message || 'Failed to register');
             setIsLoading(false);
         }
     };
@@ -69,6 +69,13 @@ export function Register() {
                             <Input id="name" {...register('name')} placeholder="John Doe" />
                             {errors.name && (
                                 <p className="text-sm text-red-500">{errors.name.message}</p>
+                            )}
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="employeeId">Employee ID</Label>
+                            <Input id="employeeId" {...register('employeeId')} placeholder="EMP001" />
+                            {errors.employeeId && (
+                                <p className="text-sm text-red-500">{errors.employeeId.message}</p>
                             )}
                         </div>
                         <div className="space-y-2">

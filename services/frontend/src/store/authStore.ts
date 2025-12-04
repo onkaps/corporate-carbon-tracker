@@ -10,8 +10,14 @@ interface AuthState {
   updateUser: (user: Partial<User>) => void;
 }
 
+// Initialize user from localStorage if available
+const getStoredUser = (): User | null => {
+  const userStr = localStorage.getItem('user');
+  return userStr ? JSON.parse(userStr) : null;
+};
+
 export const useAuthStore = create<AuthState>((set) => ({
-  user: null,
+  user: getStoredUser(),
   token: localStorage.getItem('access_token'),
   isAuthenticated: !!localStorage.getItem('access_token'),
 
@@ -28,7 +34,11 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   updateUser: (userData) =>
-    set((state) => ({
-      user: state.user ? { ...state.user, ...userData } : null,
-    })),
+    set((state) => {
+      const updatedUser = state.user ? { ...state.user, ...userData } : null;
+      if (updatedUser) {
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+      }
+      return { user: updatedUser };
+    }),
 }));
